@@ -1,0 +1,121 @@
+.item-welcome {
+  background-image: repeating-linear-gradient(
+      45deg,
+      hsla(64, 83%, 54%, 0.05) 0px,
+      hsla(64, 83%, 54%, 0.05) 1px,
+      transparent 1px,
+      transparent 11px,
+      hsla(64, 83%, 54%, 0.05) 11px,
+      hsla(64, 83%, 54%, 0.05) 12px,
+      transparent 12px,
+      transparent 32px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      hsla(64, 83%, 54%, 0.05) 0px,
+      hsla(64, 83%, 54%, 0.05) 1px,
+      transparent 1px,
+      transparent 11px,
+      hsla(64, 83%, 54%, 0.05) 11px,
+      hsla(64, 83%, 54%, 0.05) 12px,
+      transparent 12px,
+      transparent 32px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      hsla(64, 83%, 54%, 0.05) 0px,
+      hsla(64, 83%, 54%, 0.05) 1px,
+      transparent 1px,
+      transparent 11px,
+      hsla(64, 83%, 54%, 0.05) 11px,
+      hsla(64, 83%, 54%, 0.05) 12px,
+      transparent 12px,
+      transparent 32px
+    ),
+    repeating-linear-gradient(
+      135deg,
+      hsla(64, 83%, 54%, 0.05) 0px,
+      hsla(64, 83%, 54%, 0.05) 1px,
+      transparent 1px,
+      transparent 11px,
+      hsla(64, 83%, 54%, 0.05) 11px,
+      hsla(64, 83%, 54%, 0.05) 12px,
+      transparent 12px,
+      transparent 32px
+    ),
+    linear-gradient(90deg, rgb(41, 27, 158), rgb(249, 77, 212));
+}
+
+#loginBtn {
+  background-image: radial-gradient(
+      circle at 48% 33%,
+      rgba(255, 255, 255, 0.04) 0%,
+      rgba(255, 255, 255, 0.04) 8%,
+      transparent 8%,
+      transparent 92%
+    ),
+    radial-gradient(
+      circle at 28% 16%,
+      rgba(255, 255, 255, 0.04) 0%,
+      rgba(255, 255, 255, 0.04) 8%,
+      transparent 8%,
+      transparent 92%
+    ),
+    radial-gradient(
+      circle at 34% 52%,
+      rgba(255, 255, 255, 0.03) 0%,
+      rgba(255, 255, 255, 0.03) 6%,
+      transparent 6%,
+      transparent 94%
+    ),
+    radial-gradient(
+      circle at 92% 52%,
+      rgba(255, 255, 255, 0.03) 0%,
+      rgba(255, 255, 255, 0.03) 6%,
+      transparent 6%,
+      transparent 94%
+    ),
+    radial-gradient(
+      circle at 77% 84%,
+      rgba(255, 255, 255, 0.03) 0%,
+      rgba(255, 255, 255, 0.03) 6%,
+      transparent 6%,
+      transparent 94%
+    ),
+    radial-gradient(
+      circle at 75% 64%,
+      rgba(255, 255, 255, 0.03) 0%,
+      rgba(255, 255, 255, 0.03) 6%,
+      transparent 6%,
+      transparent 94%
+    ),
+    radial-gradient(
+      circle at 70% 62%,
+      rgba(255, 255, 255, 0.04) 0%,
+      rgba(255, 255, 255, 0.04) 4%,
+      transparent 4%,
+      transparent 96%
+    ),
+    radial-gradient(
+      circle at 55% 100%,
+      rgba(255, 255, 255, 0.04) 0%,
+      rgba(255, 255, 255, 0.04) 4%,
+      transparent 4%,
+      transparent 96%
+    ),
+    radial-gradient(
+      circle at 12% 11%,
+      rgba(255, 255, 255, 0.04) 0%,
+      rgba(255, 255, 255, 0.04) 4%,
+      transparent 4%,
+      transparent 96%
+    ),
+    radial-gradient(
+      circle at 35% 55%,
+      rgba(255, 255, 255, 0.04) 0%,
+      rgba(255, 255, 255, 0.04) 4%,
+      transparent 4%,
+      transparent 96%
+    ),
+    linear-gradient(45deg, rgb(26, 21, 192), rgb(171, 83, 239));
+}
