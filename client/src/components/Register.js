@@ -22,10 +22,10 @@ export default function Register(props) {
                 email,
                 password
             };
-            console.log(user);
-            const res = await axios.post('/auth/register', user);
-            localStorage.setItem('user', res);
-            localStorage.setItem('token', res.data.token);
+            const res = await axios.post('auth/register', user);
+            localStorage.setItem('userInfo', JSON.stringify(res.data));
+            localStorage.setItem('token', JSON.stringify(res.token));
+            console.log(res.data);
             history.push('/chat');
         }
         catch (err) {

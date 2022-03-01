@@ -1,0 +1,26 @@
+import { useState } from 'react';
+import Box from '@mui/material/Box';
+
+import LeftBar from '../components/LeftBar';
+import '../styles/ChatPage.css';
+import Chat from '../components/Chat';
+import { ChatState } from '../context/ChatProvider';
+// import Details from '../components/Details';
+
+export default function ChatPage() {
+
+  const [getAgain, setGetAgain] = useState(false);
+  const { user } = ChatState();
+
+  return (
+    <Box sx={{
+      width: '100%',
+      height: '100vh',
+      position: 'relative',
+    }}>
+        {user && <LeftBar getAgain={getAgain} />}
+        {user && <Chat getAgain={getAgain} setGetAgain={setGetAgain} />}
+        { /*<Details /> */}
+    </Box>
+  );
+}

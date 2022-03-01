@@ -9,9 +9,13 @@ import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
 import axios from 'axios';
 
+import { ChatState } from '../context/ChatProvider';
+
 export default function Login(props) {
 
     const history = useHistory();
+
+    const { user, setUser } = ChatState();
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -19,12 +23,18 @@ export default function Login(props) {
 
     const submitLogin = async () => {
         try {
-            const user = {
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            };
+            const curUser = {
                 email,
                 password
             };
-            const res = await axios.post('/auth/login', user);
-            localStorage.setItem('user', res.data);
+            const res = await axios.post('/auth/login', curUser, config);
+            sessionStorage.setItem('userInfo', JSON.stringify(res.data));
+            setUser(res.data);
             history.push('/chat');
         }
         catch (err) {
