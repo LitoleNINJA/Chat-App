@@ -7,14 +7,13 @@ const groupSchema = new Schema({
         type: String,
         required: true
     },
-    members: {
-        type: Array,
+    members: [{
+        type: String,
         required: true
-    },
-    messages: {
-        type: Array,
-        required: true
-    },
+    }],
+    messages: [{
+        type: String,
+    }],
     groupAdmin: {
         type: String,
         required: true
