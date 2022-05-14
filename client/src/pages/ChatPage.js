@@ -5,7 +5,7 @@ import LeftBar from '../components/LeftBar';
 import '../styles/ChatPage.css';
 import Chat from '../components/Chat';
 import { ChatState } from '../context/ChatProvider';
-// import Details from '../components/Details';
+import RightBar from '../components/RightBar';
 
 export default function ChatPage() {
 
@@ -20,7 +20,7 @@ export default function ChatPage() {
     }}>
         {user && <LeftBar getAgain={getAgain} />}
         {user && <Chat getAgain={getAgain} setGetAgain={setGetAgain} />}
-        { /*<Details /> */}
+        {user && <RightBar />}
     </Box>
   );
 }

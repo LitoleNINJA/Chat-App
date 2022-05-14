@@ -16,6 +16,10 @@ const api = (app) => {
     app.get('/api/group/:groupId', user, Group.accessGroup);
     app.post('/api/group/:groupId', user, Group.addToGroup);
     app.put('/api/group/:groupId', user, Group.renameGroup);
+    app.delete('/api/group/:groupId', user, Group.deleteGroup);
+
+    app.get('/api/user', user, Auth.getUsers);
+    app.get('/api/user/:id', user, Auth.getUser);
 }
 
 module.exports = api;

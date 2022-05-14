@@ -122,6 +122,14 @@ export default function Login(props) {
                     type='password'
                     margin='normal'
                     onChange={(e) => setPassword(e.target.value)}
+<<<<<<< HEAD
+=======
+                    onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                            submitLogin();
+                        }
+                    }}
+>>>>>>> main
                     style={{
                         width: '80%',
                     }}></TextField>

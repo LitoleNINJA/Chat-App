@@ -86,10 +86,30 @@ const renameGroup = async (req, res) => {
     }
 }
 
+// Delete a group chat
+const deleteGroup = async (req, res) => {
+    try {
+        const group = await Group.findById(req.params.groupId);
+        if (!group) {
+            return res.status(404).send({
+                message: 'Group not found'
+            });
+        }
+        await group.remove();
+        res.status(200).send({
+            message: 'Group deleted successfully'
+        });
+    }
+    catch (err) {
+        res.status(500).send(err);
+    }
+}
+
 module.exports = {
     accessGroup,
     allGroups,
     createGroup,
     addToGroup,
-    renameGroup
+    renameGroup,
+    deleteGroup
 }

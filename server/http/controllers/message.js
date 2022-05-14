@@ -18,7 +18,8 @@ const sendMessage = async (req, res) => {
     const message = {
         groupId: req.body.groupId,
         sender: req.user,
-        text: req.body.text
+        text: req.body.text,
+        isImage: req.body.isImage
     }
     try {
         const newMessage = await Message.create(message);

@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const axios = require('axios');
 require('./server/config/db')();
 require('dotenv').config();
 
@@ -33,8 +34,9 @@ io.on('connection', (socket) => {
     console.log('New user connected');
 
     socket.on('setup', (userData) => {
+        console.log(userData._id);
         socket.join(userData._id);
-        socket.emit('setup', userData);
+        socket.emit('connected');
     });
 
     socket.on('join chat', (room) => {
@@ -43,25 +45,23 @@ io.on('connection', (socket) => {
     });
 
     socket.on('typing', (room) => {
-        socket.in(room).emit('typing', room);
+        socket.in(room).emit('typing');
     });
 
     socket.on('not typing', (room) => {
-        socket.in(room).emit('not typing', room);
+        socket.in(room).emit('not typing');
     });
 
-    socket.on('new message', (message) => {
-        const group = message.groupId;
+    socket.on('send message', (message, group) => {
         group.members.forEach(member => {
-            if(member.__id === message.sender.__id) {
-            socket.in(member.__id).emit('new message', message);
-        }
-        });
+            if(member !== message.sender.userId) {
+                console.log('sending to', member);
+                socket.in(member).emit('message recieved', message);
+        }});
     });
 
-    socket.on('disconnect', () => {
-        console.log('User was disconnected');
-        socket.leave(userData.__id);
+    socket.on('disconnect', (userData) => {
+        console.log('User disconnected');
+        socket.leave(userData._id);
     });
-
 });

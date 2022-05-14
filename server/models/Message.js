@@ -13,6 +13,10 @@ const messageSchema = new Schema({
         type: String,
         required: true,
     },
+    isImage: {
+        type: Boolean,
+        default: false,
+    },
 }, {
     timestamps: {
         createdAt: true,

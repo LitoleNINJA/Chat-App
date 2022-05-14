@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 import axios from 'axios';
 
 import './App.css';
@@ -8,22 +9,29 @@ import ChatProvider from './context/ChatProvider';
 
 function App() {
   axios.defaults.baseURL = 'http://localhost:5000/api';
+  const theme = createTheme({
+    typography: {
+      allVariants: {
+        fontFamily: 'system-ui',
+      },
+    },
+  });
+
   return (
-    <Router>
-      <ChatProvider>
-        <Switch>
+    <ThemeProvider theme={theme}>
+      <Router>
+        <ChatProvider>
+          <Switch>
             <Route exact path="/">
               <LandingPage />
             </Route>
             <Route path="/chat">
               <ChatPage />
             </Route>
-            {/* <Route path="/profile/:username">
-              <Profile />
-            </Route> */}
-        </Switch>
-      </ChatProvider>
-    </Router>
+          </Switch>
+        </ChatProvider>
+      </Router>
+    </ThemeProvider>
   );
 }
 

@@ -87,8 +87,38 @@ const verify = async (req, res) => {
     }
 }
 
+const getUsers = async (req, res) => {
+    try {
+        const query = req.query.search ? {
+            $or: [
+                { username: { $regex: "^" + req.query.search, $options: 'i' } },
+                { email: { $regex: "^" + req.query.search, $options: 'i' } }
+            ]
+        } : {};
+        const users = await User.find(query).find({ $ne: { _id: req.user._id } });
+        res.status(200).json({ users });
+    } catch (error) {
+        res.status(500).json({
+            message: error.message
+        });
+    }
+}
+
+const getUser = async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id);
+        res.status(200).json({ user });
+    } catch (error) {
+        res.status(500).json({
+            message: error.message
+        });
+    }
+}
+
 module.exports = {
     register,
     login,
-    verify
+    verify,
+    getUsers,
+    getUser
 }
