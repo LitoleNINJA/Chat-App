@@ -9,13 +9,11 @@ export default function Chat() {
 
   return (
     <Box sx={{
-      width: '50%',
       height: '100%',
       backgroundColor: '#161819',
-      position: 'absolute',
-      left: '25%',
-      display: 'flex',
+      display: {sm:'flex', xs: selectedChat ? 'flex' : 'none'},
       flexDirection: 'column',
+      flexGrow: 2,
     }}>
       <SingleChat />
     </Box>

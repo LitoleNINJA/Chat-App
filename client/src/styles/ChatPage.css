@@ -1,3 +1,8 @@
 ::-webkit-scrollbar {
     display: none;
 }
+
+.emoji-picker-react .emoji-group:before, input.emoji-search {
+    color: #e3e3e3 !important;
+    background: #52057B !important;
+}
