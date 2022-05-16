@@ -7,6 +7,7 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
+import { Typography } from '@mui/material';
 import axios from 'axios';
 
 import { ChatState } from '../context/ChatProvider';
@@ -46,27 +47,27 @@ export default function Login(props) {
 
     return (
         <Box className='container' sx={{
-            width: '70%',
-            height: '70vh',
-            position: 'relative',
-            margin: '5rem auto',
+            width: '80%',
+            height: { md: '70vh', sm: '100%', xs: '100%' },
+            margin: {md: '5rem auto', sm: '3rem auto', xs: '3rem auto'},
             boxShadow: '0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22)',
             display: 'flex',
-            flexDirection: 'row',
+            flexDirection: { md: 'row', sm: 'column', xs: 'column' },
             alignItems: 'center'
         }}>
+
             <Box className='overlay-left item-welcome active' sx={{
-                width: '50%',
-                height: '100%',
-                position: 'absolute',
-                left: '0',
+                width: { md: '50%', sm: '100%', xs: '100%' },
+                height: { md: '100%', sm: '20rem', xs: '20rem' },
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'center',
                 alignItems: 'center',
             }}>
-                <h1 style={{ color: 'white' }}>Welcome to Chat App !</h1>
-                <h3 style={{ color: 'white', marginTop: '1rem' }}>Don't have an account ?</h3>
+                <Typography variant='h3' style={{
+                    color: 'white',
+                }}>Welcome to Chat App !</Typography>
+                <Typography variant='h5' style={{ color: 'white', marginTop: '2rem' }}>Don't have an account ?</Typography>
                 <Button
                     variant='outlined'
                     onClick={() => setIsLogin(false)}
@@ -74,21 +75,22 @@ export default function Login(props) {
                         color: 'white',
                         border: '2px solid white',
                         borderRadius: '2rem',
-                        marginTop: '1rem'
+                        marginTop: '2rem'
                     }}>Sign Up</Button>
             </Box>
+
+
             <Box className='sign-in-form active' sx={{
-                width: '50%',
-                position: 'absolute',
-                right: '0',
+                width: { md: '50%', sm: '100%', xs: '100%' },
+                height: { sm: '30rem', xs: '30rem' },
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'center',
                 alignItems: 'center'
             }}>
-                <h1 style={{
+                <Typography variant='h2' style={{
                     margin: '2rem 0 1rem'
-                }}>LOGIN</h1>
+                }}>LOGIN</Typography>
                 <Box sx={{
                     mb: '1rem',
                     width: '20%',
@@ -122,14 +124,11 @@ export default function Login(props) {
                     type='password'
                     margin='normal'
                     onChange={(e) => setPassword(e.target.value)}
-<<<<<<< HEAD
-=======
                     onKeyDown={(e) => {
                         if (e.key === 'Enter') {
                             submitLogin();
                         }
                     }}
->>>>>>> main
                     style={{
                         width: '80%',
                     }}></TextField>
@@ -139,15 +138,15 @@ export default function Login(props) {
                 <Button variant='contained' onClick={submitLogin} style={{
                     margin: '2rem 0',
                 }}>Sign In</Button>
-                <Snackbar 
-                open={error} 
-                anchorOrigin={{ vertical:'bottom' , horizontal: 'right' }}
-                autoHideDuration={6000} 
-                onClose={()=>setError(false)}>
-                    <Alert 
-                        onClose={()=>setError(false)} 
+                <Snackbar
+                    open={error}
+                    anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                    autoHideDuration={6000}
+                    onClose={() => setError(false)}>
+                    <Alert
+                        onClose={() => setError(false)}
                         variant='filled'
-                        severity="error" 
+                        severity="error"
                         sx={{ width: '100%' }}>
                         Invalid Email or Password !
                     </Alert>

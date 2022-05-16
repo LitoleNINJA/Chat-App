@@ -107,10 +107,8 @@ export default function RightBar() {
         <Box sx={{
             width: '25%',
             height: '100%',
-            position: 'absolute',
-            right: 0,
             backgroundColor: '#272728',
-            display: 'flex',
+            display: {md: 'flex', sm: 'none', xs: 'none'},
             flexDirection: 'column',
             alignItems: 'center',
         }}>
@@ -130,7 +128,7 @@ export default function RightBar() {
                     Chat Details
                 </Typography>
             </Box>
-
+            
             {/* Members */}
             <Box sx={{
                 width: '80%',

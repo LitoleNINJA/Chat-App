@@ -9,6 +9,8 @@ import AddBoxIcon from '@mui/icons-material/AddBox';
 import axios from 'axios';
 import Avatar from '@mui/material/Avatar';
 import CardMedia from '@mui/material/CardMedia';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import Picker, { SKIN_TONE_MEDIUM_LIGHT } from 'emoji-picker-react';
 import { LottieAnimation } from "react-lottie-tools";
 
 import { ChatState } from '../context/ChatProvider';
@@ -18,15 +20,16 @@ var socket, chatCompare;
 
 export default function SingleChat() {
 
-  const { selectedChat, user, setUser } = ChatState();
+  const { selectedChat, setSelectedChat, user, setUser, notif, setNotif } = ChatState();
 
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const [groupName, setGroupName] = useState('');
   const [typing, setTyping] = useState(false);
-  const [notification, setNotification] = useState([]);
   const [isTyping, setIsTyping] = useState(false);
   const [socketConnected, setSocketConnected] = useState(false);
+  const [pickerOpen, setPickerOpen] = useState(false);
+  const [emoji, setEmoji] = useState(null);
 
   const getGroup = async () => {
     try {
@@ -108,10 +111,9 @@ export default function SingleChat() {
 
   useEffect(() => {
     socket.on('message recieved', (message) => {
-      console.log(message);
       if (!chatCompare || chatCompare !== message.groupId) {
-        if (!notification.includes(message)) {
-          setNotification([message, ...notification]);
+        if (!notif || !notif.includes(message)) {
+          setNotif([message, ...notif]);
         }
       }
       else {
@@ -212,6 +214,16 @@ export default function SingleChat() {
     widget.open();
   }
 
+  const handleEmoji = (event, emojiObject) => {
+    setEmoji(emojiObject);
+    setNewMessage(`${newMessage}${emojiObject.emoji}`);
+    setPickerOpen(false);
+  }
+
+  const goBack = () => {
+    setSelectedChat(null);
+  }
+
   return (
     <>
       {selectedChat ? (
@@ -223,8 +235,22 @@ export default function SingleChat() {
             color: '#fff',
             boxShadow: '0 0.5rem 1rem rgba(0, 0, 0, 0.5)',
             backgroundColor: '#52057B',
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center',
           }}>
-            <Typography variant='h3' align='center'>{groupName}</Typography>
+            <ArrowBackIcon onClick={goBack} sx={{
+              width: '2rem',
+              height: '2rem',
+              '&:hover': {
+                cursor: 'pointer',
+                color: '#0048ea',
+              }
+            }} />
+            <Typography variant='h3' align='center' sx={{
+              width: '100%',
+            }} >{groupName}</Typography>
           </Box>
 
           {/* Chat Messages */}
@@ -287,7 +313,7 @@ export default function SingleChat() {
                     )}
                     {m.isImage === false ? (
                     <Box sx={{
-                      bgcolor: `${m.sender.userId === user._id ? '#2c82fa' : '#27292e'}`,
+                      bgcolor: `${m.sender.userId === user._id ? '#2c82fa' : '#4aac7e'}`,
                       borderRadius: isSenderUser(messages, i, user._id) ? '10rem 0 10rem 10rem' : '0 10rem 10rem 10rem',
                       p: '0.3rem 0.8rem',
                       maxWidth: '50%',
@@ -300,7 +326,7 @@ export default function SingleChat() {
                     </Box>
                     ) : (
                       <Box sx={{
-                        bgcolor: `${m.sender.userId === user._id ? '#2c82fa' : '#27292e'}`,
+                        bgcolor: `${m.sender.userId === user._id ? '#2c82fa' : '#4aac7e'}`,
                         borderRadius: isSenderUser(messages, i, user._id) ? '1rem 0 1rem 1rem' : '0 1rem 1rem 1rem',
                         p: '0.3rem',
                         maxWidth: '50%',
@@ -351,11 +377,27 @@ export default function SingleChat() {
               backgroundColor: '#27292e',
               borderRadius: '0.5rem',
             }}>
-              <IconButton>
+              <IconButton
+                onClick={() => setPickerOpen(!pickerOpen)}
+              >
                 <EmojiEmotionsIcon style={{
                   color: '#fff',
                 }} />
               </IconButton>
+
+              {pickerOpen && (
+                <Picker 
+                onEmojiClick={handleEmoji}
+                skinTone={SKIN_TONE_MEDIUM_LIGHT}
+                disableSearchBar={true}
+                pickerStyle={{
+                  position: 'absolute',
+                  width: '25rem',
+                  backgroundColor: '#52057B',
+                  bottom: '6rem',
+                }} />
+              )}
+
               <Input
                 placeholder="Type a message..."
                 disableUnderline

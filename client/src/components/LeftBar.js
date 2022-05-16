@@ -18,6 +18,7 @@ import Modal from '@mui/material/Modal';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import Input from '@mui/material/Input';
 import Divider from '@mui/material/Divider';
+import Badge from '@mui/material/Badge';
 import axios from 'axios';
 
 import '../styles/ChatPage.css';
@@ -27,7 +28,7 @@ import AddGroup from './AddGroup';
 
 export default function LeftBar() {
 
-  const { selectedChat, setSelectedChat, user, chats, setChats } = ChatState();
+  const { selectedChat, setSelectedChat, user, chats, setChats, notif, setNotif } = ChatState();
 
   const [modalOpen, setModalOpen] = useState(false);
   const [search, setSearch] = useState('');
@@ -116,7 +117,7 @@ export default function LeftBar() {
   }
 
   const handleUserSelect = async (userData) => {
-    if(userData._id  === user._id)
+    if (userData._id === user._id)
       return;
     try {
       const config = {
@@ -137,15 +138,22 @@ export default function LeftBar() {
     }
   }
 
+  const getCount = (group) => {
+    let count = 0;
+    for (let i = 0; i < notif.length; i++) {
+      if (notif[i].groupId === group._id) {
+        count++;
+      }
+    }
+    return count;
+  }
 
   return (
     <Box sx={{
-      width: '25%',
+      width: {md: '25%', sm: '33%', xs: '100%'},
       height: '100%',
-      position: 'absolute',
-      left: 0,
       backgroundColor: '#000000',
-      display: 'flex',
+      display: {sm: 'flex', xs: selectedChat ? 'none' : 'flex'},
       flexDirection: 'column',
       alignItems: 'center',
     }}>
@@ -350,50 +358,65 @@ export default function LeftBar() {
         </Box>
         {chats ? (
           chats.map((item) => (
-            <ListItemButton
-              key={item._id}
-              onClick={() => setSelectedChat(item._id)}
-              // selected={selectedChat === item._id}
-              sx={{
-                ":hover": {
-                  cursor: 'pointer',
-                  backgroundColor: '#892CDC',
-                },
-                backgroundColor: selectedChat === item._id ? '#5800FF' : '#000000',
-                width: '100%',
-                cursor: 'pointer',
-                paddingLeft: '0',
-              }}>
-              <ListItemIcon>{item.avatar}</ListItemIcon>
-              <ListItemText primary={item.groupName} style={{
-                color: '#fff',
-              }} />
-              <SettingsIcon
-                aria-controls={openSettings ? 'basic-menu' : undefined}
-                aria-haspopup="true"
-                aria-expanded={openSettings ? 'true' : undefined}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleSettingClick(e);
+            <Badge
+            badgeContent={getCount(item)} 
+            key={item._id}
+            color="primary"
+            max={99}
+            sx={{
+              marginTop: '1rem',
+              width: '95%',
+            }}
+            >
+              <ListItemButton
+                onClick={() => {
+                  setSelectedChat(item._id)
+                  setNotif(notif.filter((n) => n.groupId !== item._id))
                 }}
                 sx={{
-                  color: '#fff',
-                  fontSize: '1.5rem',
-                  marginRight: '1rem',
-                }} />
-              <Menu
-                open={openSettings}
-                onClose={handleSettingClose}
-                anchorEl={anchorSetEl}
-                MenuListProps={{
-                  'aria-labelledby': 'basic-button',
+                  ":hover": {
+                    cursor: 'pointer',
+                    backgroundColor: '#892CDC',
+                  },
+                  backgroundColor: selectedChat === item._id ? '#5800FF' : '#000000',
+                  width: '100%',
+                  cursor: 'pointer',
+                  paddingLeft: '0',
+                  border: '2px solid',
+                  borderImageSlice: '1',
+                  borderImageSource: 'linear-gradient(220.94deg, #3D80FF 30%, #903BF5 70%)',
                 }}>
-                <MenuItem>Rename</MenuItem>
-                <MenuItem
-                  onClick={deleteGroup}
-                >Delete</MenuItem>
-              </Menu>
-            </ListItemButton>
+                <ListItemIcon>{item.avatar}</ListItemIcon>
+                <ListItemText primary={item.groupName} style={{
+                  color: '#fff',
+                }} />
+                <SettingsIcon
+                  aria-controls={openSettings ? 'basic-menu' : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={openSettings ? 'true' : undefined}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleSettingClick(e);
+                  }}
+                  sx={{
+                    color: '#fff',
+                    fontSize: '1.5rem',
+                    marginRight: '1rem',
+                  }} />
+                <Menu
+                  open={openSettings}
+                  onClose={handleSettingClose}
+                  anchorEl={anchorSetEl}
+                  MenuListProps={{
+                    'aria-labelledby': 'basic-button',
+                  }}>
+                  <MenuItem>Rename</MenuItem>
+                  <MenuItem
+                    onClick={deleteGroup}
+                  >Delete</MenuItem>
+                </Menu>
+              </ListItemButton>
+            </Badge>
           ))) : (<ChatLoading />)
         }
       </Box>

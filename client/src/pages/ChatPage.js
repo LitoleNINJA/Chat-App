@@ -16,7 +16,8 @@ export default function ChatPage() {
     <Box sx={{
       width: '100%',
       height: '100vh',
-      position: 'relative',
+      display: 'flex',
+      flexDirection: 'row',
     }}>
         {user && <LeftBar getAgain={getAgain} />}
         {user && <Chat getAgain={getAgain} setGetAgain={setGetAgain} />}

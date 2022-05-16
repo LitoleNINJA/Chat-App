@@ -36,6 +36,7 @@ export default function Register(props) {
     const setIsLogin = props.setIsLogin;
 
     return (
+        // TODO: make responsive
         <Box className='container' sx={{
             width: '70%',
             height: '70vh',
