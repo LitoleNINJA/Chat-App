@@ -6,6 +6,7 @@ const user = require('../server/http/middlewares/user');
 const api = (app) => {
     app.post('/api/auth/register', Auth.register);
     app.post('/api/auth/login', Auth.login);
+    app.post('/api/auth/google', Auth.google);
     app.get('/api/auth/verify/:token', Auth.verify);
 
     app.post('/api/message', user, Message.sendMessage);

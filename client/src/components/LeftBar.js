@@ -20,6 +20,7 @@ import Input from '@mui/material/Input';
 import Divider from '@mui/material/Divider';
 import Badge from '@mui/material/Badge';
 import axios from 'axios';
+import { useGoogleLogout } from 'react-google-login';
 
 import '../styles/ChatPage.css';
 import { ChatState } from '../context/ChatProvider';
@@ -28,8 +29,8 @@ import AddGroup from './AddGroup';
 
 export default function LeftBar() {
 
+  const { signOut, loaded } = useGoogleLogout({});
   const { selectedChat, setSelectedChat, user, chats, setChats, notif, setNotif } = ChatState();
-
   const [modalOpen, setModalOpen] = useState(false);
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(false);
@@ -39,6 +40,7 @@ export default function LeftBar() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const openMenu = Boolean(anchorEl);
   const openSettings = Boolean(anchorSetEl);
+
   const handleMenuClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -112,6 +114,7 @@ export default function LeftBar() {
   }
 
   const handleLogout = () => {
+    signOut();
     sessionStorage.removeItem('userInfo');
     window.location.reload();
   }
@@ -150,10 +153,10 @@ export default function LeftBar() {
 
   return (
     <Box sx={{
-      width: {md: '25%', sm: '33%', xs: '100%'},
+      width: { md: '25%', sm: '33%', xs: '100%' },
       height: '100%',
       backgroundColor: '#000000',
-      display: {sm: 'flex', xs: selectedChat ? 'none' : 'flex'},
+      display: { sm: 'flex', xs: selectedChat ? 'none' : 'flex' },
       flexDirection: 'column',
       alignItems: 'center',
     }}>
@@ -267,7 +270,7 @@ export default function LeftBar() {
         alignItems: 'center',
         marginTop: '2rem',
       }}>
-        <Avatar alt="ProfilePic" src="../../assets/profilepic1.svg" variant='rounded' style={{
+        <Avatar alt="ProfilePic" src={user.user_avatar} variant='rounded' style={{
           marginLeft: '1.5rem',
         }} />
         <Box sx={{
@@ -359,14 +362,14 @@ export default function LeftBar() {
         {chats ? (
           chats.map((item) => (
             <Badge
-            badgeContent={getCount(item)} 
-            key={item._id}
-            color="primary"
-            max={99}
-            sx={{
-              marginTop: '1rem',
-              width: '95%',
-            }}
+              badgeContent={getCount(item)}
+              key={item._id}
+              color="primary"
+              max={99}
+              sx={{
+                marginTop: '1rem',
+                width: '95%',
+              }}
             >
               <ListItemButton
                 onClick={() => {

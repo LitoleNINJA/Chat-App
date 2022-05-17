@@ -1,7 +1,9 @@
 const User = require('../../models/User');
 const jwt = require('jsonwebtoken');    
 const bcrypt = require('bcrypt');
+const { OAuth2Client } = require('google-auth-library');
 require('dotenv').config();
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 const register = async (req, res) => {
     try {
@@ -71,6 +73,62 @@ const login = async (req, res) => {
     }
 }
 
+const google = async (req, res) => {
+    try {
+        const { tokenId } = req.body;
+        const ticket = await client.verifyIdToken({
+            idToken: tokenId,
+            audience: process.env.GOOGLE_CLIENT_ID
+        });
+        const payload = ticket.getPayload();
+        const user = await User.findOne({ email: payload.email });
+        if (!user) {
+            const password = Math.random().toString(36).slice(-8);
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(password, salt);
+            const newUser = new User({
+                username: payload.name,
+                email: payload.email,
+                password: hashedPassword,
+                user_avatar: payload.picture,
+            });
+            await newUser.save();
+            user = newUser;
+            // const token = jwt.sign({
+            //     userId: newUser._id,
+            //     username: newUser.username
+            // }, process.env.JWT_SECRET, {
+            //     expiresIn: '2h'
+            // });
+            // res.status(201).json({
+            //     _id: newUser._id,
+            //     username: newUser.username,
+            //     email: newUser.email,
+            //     picture: newUser.user_avatar,
+            //     token: token
+            // });
+        }
+        const token = jwt.sign({
+            userId: user._id,
+            username: user.username
+        }, process.env.JWT_SECRET, {
+            expiresIn: '2h'
+        });
+        res.status(200).json({
+            _id: user._id,
+            username: user.username,
+            email: user.email,
+            user_avatar: payload.picture,
+            isAdmin: user.isAdmin,
+            token: token
+        });
+    } catch (error) {
+        res.status(500).json({
+            message: error.message
+        });
+    }
+}
+
 const verify = async (req, res) => {
     try {
         const token = req.headers['auth-token'];
@@ -118,6 +176,7 @@ const getUser = async (req, res) => {
 module.exports = {
     register,
     login,
+    google,
     verify,
     getUsers,
     getUser
