@@ -16,11 +16,12 @@ export default function Login(props) {
 
     const history = useHistory();
 
-    const { user, setUser } = ChatState();
+    const { setUser } = ChatState();
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [error, setError] = useState(false);
+    const [isError, setIsError] = useState(false);
+    const [error, setError] = useState('');
 
     const submitLogin = async () => {
         try {
@@ -59,16 +60,17 @@ export default function Login(props) {
             setUser(data);
             history.push('/chat');
         } catch (err) {
-            console.log(err);
+            setIsError(true);
+            setError(err.response.data.message);
         }
     }
 
     const onFailureGoogle = (response) => {
-        console.log("LOGIN Failed : ", response);
+        setIsError(true);
+        setError(response.error);
     }
 
-    // FIXME: Hide this code
-    const clientId = "510139941752-fkceqiokh2pogpmhg8gb13b40scpi3np.apps.googleusercontent.com";
+    const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 
     return (
         <Box className='container' sx={{
@@ -92,7 +94,11 @@ export default function Login(props) {
                 <Typography variant='h3' style={{
                     color: 'white',
                 }}>Welcome to Chat App !</Typography>
-                <Typography variant='h5' style={{ color: 'white', marginTop: '2rem' }}>Don't have an account ?</Typography>
+                <Typography variant='h5' style={{ 
+                    color: 'white', 
+                    marginTop: '2rem',
+                    fontWeight: '200'
+                }}>Don't have an account ?</Typography>
                 <Button
                     variant='outlined'
                     onClick={() => setIsLogin(false)}
@@ -125,8 +131,6 @@ export default function Login(props) {
                 }}>
                     <GoogleLogin
                         clientId={clientId}
-                        plugin_name="chatApp-login"
-                        buttonText='Continue with Google'
                         isSignedIn={true}
                         render={(renderProps) => (
                             <button
@@ -150,7 +154,9 @@ export default function Login(props) {
                         cookiePolicy={'single_host_origin'}
                     />
                 </Box>
-                <h4>or use your account</h4>
+                <Typography variant='body1' style={{
+                    fontWeight: '600',
+                }}>or use your account</Typography>
                 <TextField
                     required
                     label='Email'
@@ -183,12 +189,18 @@ export default function Login(props) {
                     margin: '2rem 0',
                 }}>Sign In</Button>
                 <Snackbar
-                    open={error}
+                    open={isError}
                     anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
                     autoHideDuration={6000}
-                    onClose={() => setError(false)}>
+                    onClose={() => { 
+                        setError(false)
+                        setIsError(false)
+                    }}>
                     <Alert
-                        onClose={() => setError(false)}
+                        onClose={() => { 
+                            setError(false)
+                            setIsError(false)
+                        }}
                         variant='filled'
                         severity="error"
                         sx={{ width: '100%' }}>

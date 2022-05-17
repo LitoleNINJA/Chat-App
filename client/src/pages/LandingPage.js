@@ -8,7 +8,7 @@ import Register from '../components/Register';
 export default function LandingPage() {
 
   const [isLogin, setIsLogin] = useState(true);
-  const clientId = "510139941752-fkceqiokh2pogpmhg8gb13b40scpi3np.apps.googleusercontent.com";
+  const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 
   useEffect(() => {
     gapi.load('client:auth2', () => {

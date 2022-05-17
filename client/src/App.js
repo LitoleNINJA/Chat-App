@@ -2,18 +2,16 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import axios from 'axios';
 
-import './App.css';
 import LandingPage from './pages/LandingPage';
 import ChatPage from './pages/ChatPage';
 import ChatProvider from './context/ChatProvider';
 
 function App() {
   axios.defaults.baseURL = 'http://localhost:5000/api';
+  
   const theme = createTheme({
     typography: {
-      allVariants: {
-        fontFamily: 'system-ui',
-      },
+        fontFamily: `'Poppins','san-serif'`
     },
   });
   theme.typography.h2 = {
@@ -35,6 +33,14 @@ function App() {
   theme.typography.h5 = {
     [theme.breakpoints.up('md')]: {
       fontSize: '1.5vw',
+    },
+    [theme.breakpoints.down('md')]: {
+      fontSize: '3vw',
+    },
+  };
+  theme.typography.body1 = {
+    [theme.breakpoints.up('md')]: {
+      fontSize: '1rem',
     },
     [theme.breakpoints.down('md')]: {
       fontSize: '3vw',
