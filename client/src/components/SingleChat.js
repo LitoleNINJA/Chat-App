@@ -39,6 +39,15 @@ export default function SingleChat() {
         },
       };
       const { data } = await axios.get(`/group/${selectedChat}`, config);
+      if(data.isPersonal) {
+        const names = data.groupName.split('_');
+          if(names[0] === user.username) {
+            data.groupName = names[1];
+          }
+          else {
+            data.groupName = names[0];
+          }
+      }
       setGroupName(data.groupName);
     } catch (err) {
       console.log(err);
@@ -102,6 +111,8 @@ export default function SingleChat() {
   };
 
   useEffect(() => {
+    if(!selectedChat)
+      return;
     getGroup();
     getMessages();
     const userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
@@ -408,12 +419,8 @@ export default function SingleChat() {
                   color: '#fff',
                   width: '85%',
                 }} />
-              <IconButton>
-                <AddBoxIcon
-                  onClick={openWidget}
-                  style={{
-                    color: '#fff',
-                  }} />
+              <IconButton onClick={openWidget}>
+                <AddBoxIcon style={{ color: '#fff' }} />
               </IconButton>
               <IconButton aria-label='submit' onClick={sendMessage}>
                 <SendIcon style={{

@@ -169,6 +169,7 @@ export default function RightBar() {
                     variant='temporary'
                     open={drawerOpen}
                     onClose={() => setDrawerOpen(false)}
+                    onOpen={() => setDrawerOpen(true)}
                 >
                     <Box sx={{
                         backgroundColor: '#393E46',
@@ -218,7 +219,7 @@ export default function RightBar() {
                                             background: 'linear-gradient(to right, #373b44, #4286f4)'
                                         }
                                     }}>
-                                    <Avatar sx={{
+                                    <Avatar src={userData.user_avatar} sx={{
                                         width: '2.5rem',
                                         height: '2.5rem',
                                     }} />
@@ -258,7 +259,7 @@ export default function RightBar() {
                                     alignItems: 'center',
                                     margin: '1rem 0',
                                 }}>
-                                <Avatar alt="ProfilePic" style={{
+                                <Avatar src={member.user_avatar} style={{
                                     width: '2rem',
                                     height: '2rem',
                                     marginRight: '1rem',
@@ -268,7 +269,7 @@ export default function RightBar() {
                                 <ChatBubbleOutlineRoundedIcon sx={{
                                     color: '#fff',
                                     fontSize: '2rem',
-                                    marginLeft: '11rem',
+                                    marginLeft: 'auto',
                                 }} />
                             </Box>
                         )

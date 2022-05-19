@@ -7,9 +7,12 @@ import Button from '@mui/material/Button';
 import axios from 'axios';
 import { Snackbar, Typography } from '@mui/material';
 
+import { ChatState } from '../context/ChatProvider';
+
 export default function Register(props) {
 
     const history = useHistory();
+    const { setUser } = ChatState();
 
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
@@ -19,14 +22,23 @@ export default function Register(props) {
 
     const submitRegister = async () => {
         try {
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            };
             const user = {
                 username,
                 email,
                 password
             };
-            const res = await axios.post('auth/register', user);
-            localStorage.setItem('userInfo', JSON.stringify(res.data));
-            localStorage.setItem('token', JSON.stringify(res.token));
+            const res = await axios.post('/auth/register', user, config);
+            const newres = await axios.post('/auth/login', {
+                email: email,
+                password: password
+            }, config);
+            sessionStorage.setItem('userInfo', JSON.stringify(newres.data));
+            setUser(newres.data);
             history.push('/chat');
         }
         catch (err) {
@@ -123,6 +135,8 @@ export default function Register(props) {
                     <Button variant='contained' onClick={submitRegister} style={{
                         margin: '2rem 0',
                     }}>SIGN UP</Button>
+
+                    
                     <Snackbar
                         open={isError}
                         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}

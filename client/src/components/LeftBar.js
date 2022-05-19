@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import CircleIcon from '@mui/icons-material/Circle';
@@ -29,7 +29,7 @@ import AddGroup from './AddGroup';
 
 export default function LeftBar() {
 
-  const { signOut, loaded } = useGoogleLogout({});
+  const { signOut } = useGoogleLogout({});
   const { selectedChat, setSelectedChat, user, chats, setChats, notif, setNotif } = ChatState();
   const [modalOpen, setModalOpen] = useState(false);
   const [search, setSearch] = useState('');
@@ -40,6 +40,7 @@ export default function LeftBar() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const openMenu = Boolean(anchorEl);
   const openSettings = Boolean(anchorSetEl);
+  const ref = useRef(null);
 
   const handleMenuClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -63,6 +64,20 @@ export default function LeftBar() {
         },
       };
       const { data } = await axios.get('/group', config);
+      for (let i = 0; i < data.length; i++) {
+        if(data[i].isPersonal) {
+          const names = data[i].groupName.split('_');
+          const urls = data[i].groupAvatar.split('_');
+          if(names[0] === user.username) {
+            data[i].groupName = names[1];
+            data[i].groupAvatar = urls[1];
+          }
+          else {
+            data[i].groupName = names[0];
+            data[i].groupAvatar = urls[0];
+          }
+        }
+      }
       setChats(data);
     } catch (err) {
       console.log(err);
@@ -113,6 +128,44 @@ export default function LeftBar() {
     }
   }
 
+  const openWidget = () => {
+    const widget = window.cloudinary.createUploadWidget(
+      {
+        cloudName: 'dkgydognh',
+        uploadPreset: 'imgUpload',
+      },
+      (error, result) => {
+        if (result.event === 'success') {
+          const url = result.info.secure_url;
+          handleChangeAvatar(url);
+        }
+        else {
+          console.log(error);
+        }
+      },
+    );
+    widget.open();
+  }
+
+  const handleChangeAvatar = async (url) => {
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+      const { data } = await axios.put(`/user`, { 
+        username: user.username,
+        user_avatar: url,
+      }, config);
+      user.user_avatar = data.updatedUser.user_avatar;
+      handleMenuClose();
+    }
+    catch (err) {
+      console.log(err);
+    }
+  }
+
   const handleLogout = () => {
     signOut();
     sessionStorage.removeItem('userInfo');
@@ -130,12 +183,15 @@ export default function LeftBar() {
       };
       const userList = [userData];
       const { data } = await axios.post(`/group`, {
-        name: userData.username,
-        members: userList
+        name: `${userData.username}_${user.username}`,
+        members: userList,
+        isPersonal: true,
+        groupAvatar: `${userData.user_avatar}_${user.user_avatar}`,
       }, config);
-      setChats([...chats, data]);
+      getChats();
       setDrawerOpen(false);
       setSelectedChat(data._id);
+      setSearch('');
     } catch (err) {
       console.log(err);
     }
@@ -187,6 +243,7 @@ export default function LeftBar() {
         variant='temporary'
         open={drawerOpen}
         onClose={() => setDrawerOpen(false)}
+        onOpen={() => setDrawerOpen(true)}
       >
         <Box sx={{
           backgroundColor: '#393E46',
@@ -206,6 +263,7 @@ export default function LeftBar() {
             }}>Search Users</Typography>
             <Input
               placeholder="Username or Email ..."
+              autoFocus={true}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               style={{
@@ -219,9 +277,9 @@ export default function LeftBar() {
             width: '100%',
           }} />
           <Box>
-            {loading ? <ChatLoading /> : (result.length > 0 ? result.map((user) => (
-              <Box key={user._id}
-                onClick={() => handleUserSelect(user)}
+            {loading ? <ChatLoading /> : (result.length > 0 ? result.map((userData) => (
+              <Box key={userData._id}
+                onClick={() => handleUserSelect(userData)}
                 sx={{
                   display: 'flex',
                   flexDirection: 'row',
@@ -236,7 +294,8 @@ export default function LeftBar() {
                     background: 'linear-gradient(to right, #373b44, #4286f4)'
                   }
                 }}>
-                <Avatar sx={{
+                <Avatar src={userData.user_avatar} 
+                sx={{
                   width: '2.5rem',
                   height: '2.5rem',
                 }} />
@@ -247,8 +306,8 @@ export default function LeftBar() {
                   flexDirection='column'
                   alignItems='center'
                 >
-                  <Typography variant='body1'>{user.username}</Typography>
-                  <Typography variant='body2'><b>Email : </b>{user.email}</Typography>
+                  <Typography variant='body1'>{userData.username}</Typography>
+                  <Typography variant='body2'><b>Email : </b>{userData.email}</Typography>
                 </Box>
               </Box>
             )) : <Typography variant='body1' align='center' style={{
@@ -270,7 +329,7 @@ export default function LeftBar() {
         alignItems: 'center',
         marginTop: '2rem',
       }}>
-        <Avatar alt="ProfilePic" src={user.user_avatar} variant='rounded' style={{
+        <Avatar src={user.user_avatar} variant='rounded' style={{
           marginLeft: '1.5rem',
         }} />
         <Box sx={{
@@ -318,6 +377,9 @@ export default function LeftBar() {
             'aria-labelledby': 'basic-button',
           }}
         >
+          <MenuItem onClick={openWidget}>Change Avatar</MenuItem>
+          {/* TODO: allow change username */}
+          <MenuItem >Change Username</MenuItem>
           <MenuItem onClick={handleLogout}>Logout</MenuItem>
         </Menu>
       </Box>
@@ -356,7 +418,7 @@ export default function LeftBar() {
             open={modalOpen}
             width='100%'
           >
-            <AddGroup />
+            <AddGroup ref={ref} />
           </Modal>
         </Box>
         {chats ? (
@@ -364,7 +426,7 @@ export default function LeftBar() {
             <Badge
               badgeContent={getCount(item)}
               key={item._id}
-              color="primary"
+              color='success'
               max={99}
               sx={{
                 marginTop: '1rem',
@@ -385,12 +447,14 @@ export default function LeftBar() {
                   width: '100%',
                   cursor: 'pointer',
                   paddingLeft: '0',
+                  paddingRight: '0',
                   border: '2px solid',
                   borderImageSlice: '1',
                   borderImageSource: 'linear-gradient(220.94deg, #3D80FF 30%, #903BF5 70%)',
                 }}>
-                <ListItemIcon>{item.avatar}</ListItemIcon>
+                <Avatar src={item.groupAvatar} />
                 <ListItemText primary={item.groupName} style={{
+                  marginLeft: '1rem',
                   color: '#fff',
                 }} />
                 <SettingsIcon

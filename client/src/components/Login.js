@@ -40,7 +40,8 @@ export default function Login(props) {
             history.push('/chat');
         }
         catch (err) {
-            setError(true);
+            setIsError(true);
+            setError(err.response.data.message);
         }
     }
 
