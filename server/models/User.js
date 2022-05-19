@@ -17,11 +17,7 @@ const userSchema = new Schema({
     },
     user_avatar: {
         type: String,
-    },
-    isAdmin: {
-        type: Boolean,
-        default: false
-    },
+    }
 } , {
     timestamps: true
 });

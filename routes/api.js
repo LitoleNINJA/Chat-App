@@ -21,6 +21,7 @@ const api = (app) => {
 
     app.get('/api/user', user, Auth.getUsers);
     app.get('/api/user/:id', user, Auth.getUser);
+    app.put('/api/user', user, Auth.updateUser);
 }
 
 module.exports = api;

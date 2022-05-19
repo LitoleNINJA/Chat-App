@@ -63,7 +63,7 @@ const login = async (req, res) => {
             _id: user._id,
             username: user.username,
             email: user.email,
-            isAdmin: user.isAdmin,
+            user_avatar: user.user_avatar,
             token: token
         });
     } catch (error) {
@@ -94,19 +94,6 @@ const google = async (req, res) => {
             });
             await newUser.save();
             user = newUser;
-            // const token = jwt.sign({
-            //     userId: newUser._id,
-            //     username: newUser.username
-            // }, process.env.JWT_SECRET, {
-            //     expiresIn: '2h'
-            // });
-            // res.status(201).json({
-            //     _id: newUser._id,
-            //     username: newUser.username,
-            //     email: newUser.email,
-            //     picture: newUser.user_avatar,
-            //     token: token
-            // });
         }
         const token = jwt.sign({
             userId: user._id,
@@ -173,11 +160,30 @@ const getUser = async (req, res) => {
     }
 }
 
+const updateUser = async (req, res) => {
+    try {
+        const userId = req.user.userId;
+        const { username, user_avatar } = req.body;
+        const updatedUser = await User.findByIdAndUpdate(userId, {
+            username: username,
+            user_avatar: user_avatar
+        }, { new: true });
+        res.status(200).json({
+            updatedUser
+        });
+    } catch (error) {
+        res.status(500).json({
+            message: error.message
+        });
+    }
+}
+
 module.exports = {
     register,
     login,
     google,
     verify,
     getUsers,
-    getUser
+    getUser,
+    updateUser
 }
