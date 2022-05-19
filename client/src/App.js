@@ -1,6 +1,8 @@
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import axios from 'axios';
+import { gapi } from 'gapi-script';
+import { useEffect } from 'react';
 
 import LandingPage from './pages/LandingPage';
 import ChatPage from './pages/ChatPage';
@@ -8,6 +10,16 @@ import ChatProvider from './context/ChatProvider';
 
 function App() {
   axios.defaults.baseURL = 'http://localhost:5000/api';
+
+  const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+  useEffect(() => {
+    gapi.load('client:auth2', () => {
+      gapi.client.init({
+        client_id: clientId,
+        scope: 'profile email'
+      });
+    });
+  });
   
   const theme = createTheme({
     typography: {

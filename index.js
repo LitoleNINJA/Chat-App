@@ -31,17 +31,14 @@ const io = require('socket.io')(server, {
 });
 
 io.on('connection', (socket) => {
-    console.log('New user connected');
 
     socket.on('setup', (userData) => {
-        console.log(userData._id);
         socket.join(userData._id);
         socket.emit('connected');
     });
 
     socket.on('join chat', (room) => {
         socket.join(room);
-        console.log(`User joined room ${room}`);
     });
 
     socket.on('typing', (room) => {
@@ -55,13 +52,11 @@ io.on('connection', (socket) => {
     socket.on('send message', (message, group) => {
         group.members.forEach(member => {
             if(member !== message.sender.userId) {
-                console.log('sending to', member);
                 socket.in(member).emit('message recieved', message);
         }});
     });
 
     socket.on('disconnect', (userData) => {
-        console.log('User disconnected');
         socket.leave(userData._id);
     });
 });
