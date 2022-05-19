@@ -18,6 +18,14 @@ const groupSchema = new Schema({
         type: String,
         required: true
     },
+    groupAvatar: {
+        type: String,
+        default: 'https://img.icons8.com/material/24/ffffff/user-male-circle--v1.png'
+    },
+    isPersonal: {
+        type: Boolean,
+        required: true,
+    }
 }, {
     timestamps: true,
 });

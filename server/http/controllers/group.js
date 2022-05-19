@@ -34,12 +34,13 @@ const allGroups = async (req, res) => {
 // Create a new group chat
 const createGroup = async (req, res) => {
     try {
-        users = req.body.members;
+        let users = req.body.members;
         users.push(req.user.userId);
         const group = new Group({
             groupName: req.body.name,
             members: users,
-            groupAdmin: req.user.userId
+            groupAdmin: req.user.userId,
+            isPersonal: req.body.isPersonal
         });
         const newGroup = await group.save();
         res.status(200).send(newGroup);
@@ -93,6 +94,11 @@ const deleteGroup = async (req, res) => {
         if (!group) {
             return res.status(404).send({
                 message: 'Group not found'
+            });
+        }
+        if(group.groupAdmin !== req.user.userId) {
+            return res.status(401).send({
+                message: 'You are not the group admin'
             });
         }
         await group.remove();
