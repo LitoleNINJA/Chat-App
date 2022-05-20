@@ -17,7 +17,7 @@ const allMessages = async (req, res) => {
 const sendMessage = async (req, res) => {
     const message = {
         groupId: req.body.groupId,
-        sender: req.user,
+        sender: req.body.sender,
         text: req.body.text,
         isImage: req.body.isImage
     }

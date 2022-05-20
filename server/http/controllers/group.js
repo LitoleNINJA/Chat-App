@@ -40,6 +40,7 @@ const createGroup = async (req, res) => {
             groupName: req.body.name,
             members: users,
             groupAdmin: req.user.userId,
+            groupAvatar: req.body.groupAvatar,
             isPersonal: req.body.isPersonal
         });
         const newGroup = await group.save();

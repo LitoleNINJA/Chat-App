@@ -67,7 +67,7 @@ export default function LeftBar() {
       for (let i = 0; i < data.length; i++) {
         if(data[i].isPersonal) {
           const names = data[i].groupName.split('_');
-          const urls = data[i].groupAvatar.split('_');
+          const urls = data[i].groupAvatar.split(' ');
           if(names[0] === user.username) {
             data[i].groupName = names[1];
             data[i].groupAvatar = urls[1];
@@ -101,6 +101,7 @@ export default function LeftBar() {
         },
       };
       const { data } = await axios.get(`/user?search=${search}`, config);
+      data.users = data.users.filter(userData => userData._id !== user._id);
       setResult(data.users);
       setLoading(false);
     } catch (err) {
@@ -173,8 +174,6 @@ export default function LeftBar() {
   }
 
   const handleUserSelect = async (userData) => {
-    if (userData._id === user._id)
-      return;
     try {
       const config = {
         headers: {
@@ -182,11 +181,12 @@ export default function LeftBar() {
         },
       };
       const userList = [userData];
+      const s = userData.user_avatar.concat(" ", user.user_avatar);
       const { data } = await axios.post(`/group`, {
         name: `${userData.username}_${user.username}`,
         members: userList,
         isPersonal: true,
-        groupAvatar: `${userData.user_avatar}_${user.user_avatar}`,
+        groupAvatar: s,
       }, config);
       getChats();
       setDrawerOpen(false);
@@ -363,6 +363,7 @@ export default function LeftBar() {
           onClick={handleMenuClick}
         >
           <MoreHorizIcon sx={{
+            marginLeft: 'auto',
             marginRight: '1.5rem',
             color: '#fff',
             fontSize: '1.5rem',
@@ -376,11 +377,29 @@ export default function LeftBar() {
           MenuListProps={{
             'aria-labelledby': 'basic-button',
           }}
+          sx={{
+            transition: 'all 0.5s ease',
+          }}
         >
-          <MenuItem onClick={openWidget}>Change Avatar</MenuItem>
+          <MenuItem sx={{
+            backgroundColor: '#bcbcbc',
+            ':hover': {
+              color: '#15967d',
+          }}} 
+          onClick={openWidget}>Change Avatar</MenuItem>
           {/* TODO: allow change username */}
-          <MenuItem >Change Username</MenuItem>
-          <MenuItem onClick={handleLogout}>Logout</MenuItem>
+          <MenuItem sx={{
+            backgroundColor: '#bcbcbc',
+            ':hover': {
+              color: '#15967d',
+          }}}
+          >Change Username</MenuItem>
+          <MenuItem sx={{
+            backgroundColor: '#bcbcbc',
+            ':hover': {
+              color: '#15967d',
+          }}}
+          onClick={handleLogout}>Logout</MenuItem>
         </Menu>
       </Box>
 
@@ -452,7 +471,9 @@ export default function LeftBar() {
                   borderImageSlice: '1',
                   borderImageSource: 'linear-gradient(220.94deg, #3D80FF 30%, #903BF5 70%)',
                 }}>
-                <Avatar src={item.groupAvatar} />
+                <Avatar src={item.groupAvatar} sx={{
+                  marginLeft: '1rem',
+                }} />
                 <ListItemText primary={item.groupName} style={{
                   marginLeft: '1rem',
                   color: '#fff',

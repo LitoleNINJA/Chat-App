@@ -30,6 +30,7 @@ export default function SingleChat() {
   const [socketConnected, setSocketConnected] = useState(false);
   const [pickerOpen, setPickerOpen] = useState(false);
   const [emoji, setEmoji] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const getGroup = async () => {
     try {
@@ -39,14 +40,14 @@ export default function SingleChat() {
         },
       };
       const { data } = await axios.get(`/group/${selectedChat}`, config);
-      if(data.isPersonal) {
+      if (data.isPersonal) {
         const names = data.groupName.split('_');
-          if(names[0] === user.username) {
-            data.groupName = names[1];
-          }
-          else {
-            data.groupName = names[0];
-          }
+        if (names[0] === user.username) {
+          data.groupName = names[1];
+        }
+        else {
+          data.groupName = names[0];
+        }
       }
       setGroupName(data.groupName);
     } catch (err) {
@@ -56,6 +57,7 @@ export default function SingleChat() {
 
   const getMessages = async () => {
     try {
+      setLoading(true);
       const config = {
         headers: {
           Authorization: `Bearer ${user.token}`,
@@ -64,6 +66,7 @@ export default function SingleChat() {
       const { data } = await axios.get(`/message/${selectedChat}`, config);
       setMessages(data);
       socket.emit('join chat', selectedChat);
+      setLoading(false);
     } catch (err) {
       console.log(err);
     }
@@ -94,6 +97,7 @@ export default function SingleChat() {
         };
         const messagenInfo = {
           groupId: selectedChat,
+          sender: user,
           text: newMessage,
           isImage: false,
         }
@@ -103,7 +107,6 @@ export default function SingleChat() {
         scrollToBottom();
         const { data } = await axios.get(`/group/${selectedChat}`, config);
         socket.emit('send message', res.data, data);
-
       } catch (err) {
         console.log(err);
       }
@@ -111,7 +114,7 @@ export default function SingleChat() {
   };
 
   useEffect(() => {
-    if(!selectedChat)
+    if (!selectedChat)
       return;
     getGroup();
     getMessages();
@@ -151,14 +154,14 @@ export default function SingleChat() {
   const isSenderSame = (messages, m, i) => {
     return (
       (i > 0 &&
-        messages[i - 1].sender.userId === m.sender.userId
+        messages[i - 1].sender._id === m.sender._id
       )
     );
   }
 
   const isSenderUser = (messages, i, userId) => {
     return (
-      messages[i].sender.userId === userId
+      messages[i].sender._id === userId
     );
   }
 
@@ -242,7 +245,7 @@ export default function SingleChat() {
           {/* Group Heading  */}
           <Box sx={{
             height: '4rem',
-            px: '2rem',
+            px: '1.5rem',
             color: '#fff',
             boxShadow: '0 0.5rem 1rem rgba(0, 0, 0, 0.5)',
             backgroundColor: '#52057B',
@@ -280,8 +283,8 @@ export default function SingleChat() {
                   flexDirection: isSenderUser(messages, i, user._id) ? 'row-reverse' : 'row',
                 }}>
                   {(!isSenderSame(messages, m, i) && (
-                    <Avatar alt={m.sender.username} sx={{
-                      marginTop: '2rem',
+                    <Avatar alt={m.sender.username} src={m.sender.user_avatar} sx={{
+                      margin: isSenderUser(messages, i, user._id) ? '2rem 1rem 0 0' : '2rem 0 0 1rem',
                       width: '2rem',
                       height: '2rem',
                     }} />
@@ -323,35 +326,35 @@ export default function SingleChat() {
                       </Box>
                     )}
                     {m.isImage === false ? (
-                    <Box sx={{
-                      bgcolor: `${m.sender.userId === user._id ? '#2c82fa' : '#4aac7e'}`,
-                      borderRadius: isSenderUser(messages, i, user._id) ? '10rem 0 10rem 10rem' : '0 10rem 10rem 10rem',
-                      p: '0.3rem 0.8rem',
-                      maxWidth: '50%',
-                      marginRight: isSenderSame(messages, m, i) ? '3rem' : '1rem',
-                      marginLeft: isSenderSame(messages, m, i) ? '3rem' : '1rem',
-                    }}>
-                      <Typography variant='body1' style={{
-                        color: '#fff',
-                      }}>{m.text}</Typography>
-                    </Box>
+                      <Box sx={{
+                        bgcolor: `${m.sender._id === user._id ? '#2c82fa' : '#0a864b'}`,
+                        borderRadius: isSenderUser(messages, i, user._id) ? '10rem 0 10rem 10rem' : '0 10rem 10rem 10rem',
+                        p: '0.3rem 0.8rem',
+                        maxWidth: '50%',
+                        marginRight: isSenderSame(messages, m, i) ? '3rem' : '1rem',
+                        marginLeft: isSenderSame(messages, m, i) ? '3rem' : '1rem',
+                      }}>
+                        <Typography variant='body1' style={{
+                          color: '#fff',
+                        }}>{m.text}</Typography>
+                      </Box>
                     ) : (
                       <Box sx={{
-                        bgcolor: `${m.sender.userId === user._id ? '#2c82fa' : '#4aac7e'}`,
+                        bgcolor: `${m.sender._id === user._id ? '#2c82fa' : '#4aac7e'}`,
                         borderRadius: isSenderUser(messages, i, user._id) ? '1rem 0 1rem 1rem' : '0 1rem 1rem 1rem',
                         p: '0.3rem',
                         maxWidth: '50%',
                         marginRight: isSenderSame(messages, m, i) ? '3rem' : '1rem',
                         marginLeft: isSenderSame(messages, m, i) ? '3rem' : '1rem',
                       }}>
-                        <CardMedia 
-                        src={m.text}
-                        image={m.text}
-                        sx={{
-                          borderRadius: '1rem',
-                          width: '15rem',
-                          height: '15rem',
-                        }} />
+                        <CardMedia
+                          src={m.text}
+                          image={m.text}
+                          sx={{
+                            borderRadius: '1rem',
+                            width: '15rem',
+                            height: '15rem',
+                          }} />
                       </Box>
                     )}
                   </Box>
@@ -397,16 +400,16 @@ export default function SingleChat() {
               </IconButton>
 
               {pickerOpen && (
-                <Picker 
-                onEmojiClick={handleEmoji}
-                skinTone={SKIN_TONE_MEDIUM_LIGHT}
-                disableSearchBar={true}
-                pickerStyle={{
-                  position: 'absolute',
-                  width: '25rem',
-                  backgroundColor: '#52057B',
-                  bottom: '6rem',
-                }} />
+                <Picker
+                  onEmojiClick={handleEmoji}
+                  skinTone={SKIN_TONE_MEDIUM_LIGHT}
+                  disableSearchBar={true}
+                  pickerStyle={{
+                    position: 'absolute',
+                    width: '25rem',
+                    backgroundColor: '#52057B',
+                    bottom: '6rem',
+                  }} />
               )}
 
               <Input
