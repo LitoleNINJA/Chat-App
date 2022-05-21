@@ -114,8 +114,7 @@ const AddGroup = React.forwardRef((props, ref) => {
                     style: {
                         color: 'rgba(255, 255, 255, 0.5)',
                     }
-                }}>
-            </TextField>
+                }} />
             <TextField
                 variant='outlined'
                 label='Add Users'
@@ -136,8 +135,7 @@ const AddGroup = React.forwardRef((props, ref) => {
                     style: {
                         color: 'rgba(255, 255, 255, 0.5)',
                     }
-                }}>
-            </TextField>
+                }} />
 
             {loading ? (
                 <Box>Loading</Box>

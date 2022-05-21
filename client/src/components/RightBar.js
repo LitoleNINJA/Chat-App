@@ -196,7 +196,7 @@ export default function RightBar() {
                                     color: '#fff',
                                     width: '100%',
                                 }}
-                            ></Input>
+                             />
                         </Box>
                         <Divider variant="middle" sx={{
                             width: '100%',
