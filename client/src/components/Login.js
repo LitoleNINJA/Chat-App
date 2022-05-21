@@ -132,7 +132,7 @@ export default function Login(props) {
                 }}>
                     <GoogleLogin
                         clientId={clientId}
-                        isSignedIn={true}
+                        isSignedIn
                         render={(renderProps) => (
                             <button
                                 className='google-login'
