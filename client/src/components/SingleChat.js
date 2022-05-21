@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Input from '@mui/material/Input';
@@ -196,6 +196,7 @@ export default function SingleChat() {
       const messagenInfo = {
         groupId: selectedChat,
         text: url,
+        sender: user,
         isImage: true,
       }
       const res = await axios.post(`/message`, messagenInfo, config);
@@ -343,7 +344,7 @@ export default function SingleChat() {
                         bgcolor: `${m.sender._id === user._id ? '#2c82fa' : '#4aac7e'}`,
                         borderRadius: isSenderUser(messages, i, user._id) ? '1rem 0 1rem 1rem' : '0 1rem 1rem 1rem',
                         p: '0.3rem',
-                        maxWidth: '50%',
+                        maxWidth: {lg: '50%'},
                         marginRight: isSenderSame(messages, m, i) ? '3rem' : '1rem',
                         marginLeft: isSenderSame(messages, m, i) ? '3rem' : '1rem',
                       }}>

@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import CircleIcon from '@mui/icons-material/Circle';
@@ -65,10 +65,10 @@ export default function LeftBar() {
       };
       const { data } = await axios.get('/group', config);
       for (let i = 0; i < data.length; i++) {
-        if(data[i].isPersonal) {
+        if (data[i].isPersonal) {
           const names = data[i].groupName.split('_');
           const urls = data[i].groupAvatar.split(' ');
-          if(names[0] === user.username) {
+          if (names[0] === user.username) {
             data[i].groupName = names[1];
             data[i].groupAvatar = urls[1];
           }
@@ -155,7 +155,7 @@ export default function LeftBar() {
           Authorization: `Bearer ${user.token}`,
         },
       };
-      const { data } = await axios.put(`/user`, { 
+      const { data } = await axios.put(`/user`, {
         username: user.username,
         user_avatar: url,
       }, config);
@@ -209,10 +209,10 @@ export default function LeftBar() {
 
   return (
     <Box sx={{
-      width: { md: '25%', sm: '33%', xs: '100%' },
+      width: { lg: '25%', md: '33%', sm: '100%', xs: '100%' },
       height: '100%',
       backgroundColor: '#000000',
-      display: { sm: 'flex', xs: selectedChat ? 'none' : 'flex' },
+      display: { md: 'flex', sm: selectedChat ? 'none' : 'flex', xs: selectedChat ? 'none' : 'flex' },
       flexDirection: 'column',
       alignItems: 'center',
     }}>
@@ -294,11 +294,11 @@ export default function LeftBar() {
                     background: 'linear-gradient(to right, #373b44, #4286f4)'
                   }
                 }}>
-                <Avatar src={userData.user_avatar} 
-                sx={{
-                  width: '2.5rem',
-                  height: '2.5rem',
-                }} />
+                <Avatar src={userData.user_avatar}
+                  sx={{
+                    width: '2.5rem',
+                    height: '2.5rem',
+                  }} />
                 <Box
                   cursor='pointer'
                   width='100%'
@@ -353,7 +353,7 @@ export default function LeftBar() {
               color: '#62c554',
               fontSize: '1rem',
             }} />
-            <p style={{ marginLeft: '0.4rem' }}>Online</p>
+            <Typography variant='body1' style={{ marginLeft: '0.4rem' }}>Online</Typography>
           </Box>
         </Box>
         <Button
@@ -382,24 +382,24 @@ export default function LeftBar() {
           }}
         >
           <MenuItem sx={{
-            backgroundColor: '#bcbcbc',
             ':hover': {
               color: '#15967d',
-          }}} 
-          onClick={openWidget}>Change Avatar</MenuItem>
+            }
+          }}
+            onClick={openWidget}>Change Avatar</MenuItem>
           {/* TODO: allow change username */}
           <MenuItem sx={{
-            backgroundColor: '#bcbcbc',
             ':hover': {
               color: '#15967d',
-          }}}
+            }
+          }}
           >Change Username</MenuItem>
           <MenuItem sx={{
-            backgroundColor: '#bcbcbc',
             ':hover': {
               color: '#15967d',
-          }}}
-          onClick={handleLogout}>Logout</MenuItem>
+            }
+          }}
+            onClick={handleLogout}>Logout</MenuItem>
         </Menu>
       </Box>
 
@@ -448,62 +448,58 @@ export default function LeftBar() {
               color='success'
               max={99}
               sx={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
                 marginTop: '1rem',
                 width: '95%',
+                ":hover": {
+                  cursor: 'pointer',
+                  backgroundColor: '#892CDC',
+                },
+                backgroundColor: selectedChat === item._id ? '#5800FF' : '#000000',
+                width: '100%',
+                cursor: 'pointer',
+                paddingLeft: '0',
+                paddingRight: '0',
+                border: '2px solid',
+                borderImageSlice: '1',
+                borderImageSource: 'linear-gradient(220.94deg, #3D80FF 30%, #903BF5 70%)',
               }}
             >
               <ListItemButton
                 onClick={() => {
                   setSelectedChat(item._id)
                   setNotif(notif.filter((n) => n.groupId !== item._id))
-                }}
-                sx={{
-                  ":hover": {
-                    cursor: 'pointer',
-                    backgroundColor: '#892CDC',
-                  },
-                  backgroundColor: selectedChat === item._id ? '#5800FF' : '#000000',
-                  width: '100%',
-                  cursor: 'pointer',
-                  paddingLeft: '0',
-                  paddingRight: '0',
-                  border: '2px solid',
-                  borderImageSlice: '1',
-                  borderImageSource: 'linear-gradient(220.94deg, #3D80FF 30%, #903BF5 70%)',
                 }}>
-                <Avatar src={item.groupAvatar} sx={{
-                  marginLeft: '1rem',
-                }} />
+                <Avatar src={item.groupAvatar} />
                 <ListItemText primary={item.groupName} style={{
                   marginLeft: '1rem',
                   color: '#fff',
                 }} />
-                <SettingsIcon
-                  aria-controls={openSettings ? 'basic-menu' : undefined}
-                  aria-haspopup="true"
-                  aria-expanded={openSettings ? 'true' : undefined}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleSettingClick(e);
-                  }}
-                  sx={{
-                    color: '#fff',
-                    fontSize: '1.5rem',
-                    marginRight: '1rem',
-                  }} />
-                <Menu
-                  open={openSettings}
-                  onClose={handleSettingClose}
-                  anchorEl={anchorSetEl}
-                  MenuListProps={{
-                    'aria-labelledby': 'basic-button',
-                  }}>
-                  <MenuItem>Rename</MenuItem>
-                  <MenuItem
-                    onClick={deleteGroup}
-                  >Delete</MenuItem>
-                </Menu>
               </ListItemButton>
+              <SettingsIcon
+                aria-controls={openSettings ? 'basic-menu' : undefined}
+                aria-haspopup="true"
+                aria-expanded={openSettings ? 'true' : undefined}
+                onClick={handleSettingClick}
+                sx={{
+                  color: '#fff',
+                  fontSize: '1.5rem',
+                  marginRight: '1rem',
+                }} />
+              <Menu
+                open={openSettings}
+                onClose={handleSettingClose}
+                anchorEl={anchorSetEl}
+                MenuListProps={{
+                  'aria-labelledby': 'basic-button',
+                }}>
+                <MenuItem>Rename</MenuItem>
+                <MenuItem
+                  onClick={deleteGroup}
+                >Delete</MenuItem>
+              </Menu>
             </Badge>
           ))) : (<ChatLoading />)
         }

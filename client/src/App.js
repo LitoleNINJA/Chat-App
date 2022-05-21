@@ -9,7 +9,7 @@ import ChatPage from './pages/ChatPage';
 import ChatProvider from './context/ChatProvider';
 
 function App() {
-  axios.defaults.baseURL = 'http://localhost:5000/api';
+  axios.defaults.baseURL = process.env.REACT_APP_AXIOS_BASE_URL;
 
   const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
   useEffect(() => {
@@ -48,6 +48,17 @@ function App() {
     },
     [theme.breakpoints.down('md')]: {
       fontSize: '3vw',
+    },
+  };
+  theme.typography.h6 = {
+    [theme.breakpoints.up('md')]: {
+      fontSize: '1.25rem',
+    },
+    [theme.breakpoints.down('md')]: {
+      fontSize: '2.5vw',
+    },
+    [theme.breakpoints.down('sm')]: {
+      fontSize: '4vw',
     },
   };
   theme.typography.body1 = {

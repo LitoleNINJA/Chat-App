@@ -1,5 +1,4 @@
 const Message = require('../../models/Message');
-const User = require('../../models/User');
 const Group = require('../../models/Group');
 
 // Get all messages of a group

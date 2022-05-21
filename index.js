@@ -1,6 +1,5 @@
 const express = require('express');
 const cors = require('cors');
-const axios = require('axios');
 require('./server/config/db')();
 require('dotenv').config();
 
@@ -11,7 +10,7 @@ app.use(express.urlencoded({ extended: true }));
 
 require('./routes/api')(app);
 
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
     res.send({
         error: err.message
     });

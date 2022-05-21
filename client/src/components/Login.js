@@ -205,7 +205,7 @@ export default function Login(props) {
                         variant='filled'
                         severity="error"
                         sx={{ width: '100%' }}>
-                        Invalid Email or Password !
+                        {error}
                     </Alert>
                 </Snackbar>
             </Box>

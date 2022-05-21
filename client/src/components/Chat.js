@@ -11,7 +11,7 @@ export default function Chat() {
     <Box sx={{
       height: '100%',
       backgroundColor: '#161819',
-      display: {sm:'flex', xs: selectedChat ? 'flex' : 'none'},
+      display: {md:'flex', sm: selectedChat ? 'flex' : 'none', xs: selectedChat ? 'flex' : 'none'},
       flexDirection: 'column',
       flexGrow: 2,
     }}>

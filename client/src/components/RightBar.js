@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Avatar, Box, Typography } from "@mui/material";
 import ChatRoundedIcon from '@mui/icons-material/ChatRounded';
 import AddIcon from '@mui/icons-material/Add';
@@ -87,7 +87,7 @@ export default function RightBar() {
                     Authorization: `Bearer ${user.token}`,
                 },
             };
-            const { data } = await axios.post(`/group/${selectedChat}`, {
+            await axios.post(`/group/${selectedChat}`, {
                 userId: userData._id,
             }, config);
             setMembers([...members, userData]);
@@ -108,7 +108,7 @@ export default function RightBar() {
             width: '25%',
             height: '100%',
             backgroundColor: '#272728',
-            display: {md: 'flex', sm: 'none', xs: 'none'},
+            display: {lg: 'flex', md: 'none', sm: 'none', xs: 'none'},
             flexDirection: 'column',
             alignItems: 'center',
         }}>
