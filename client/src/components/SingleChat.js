@@ -74,7 +74,7 @@ export default function SingleChat() {
   };
 
   useEffect(() => {
-    socket = io(`http://localhost:5000`);
+    socket = io(`https://c-h-a-t-a-p-p1.herokuapp.com/`);
     socket.emit('setup', user);
     socket.on('connected', () => setSocketConnected(true));
     socket.on('typing', () => setIsTyping(true));
