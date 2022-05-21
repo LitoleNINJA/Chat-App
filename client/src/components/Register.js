@@ -111,7 +111,7 @@ export default function Register(props) {
                         onChange={(e) => setUsername(e.target.value)}
                         style={{
                             width: '80%',
-                        }}></TextField>
+                        }} />
                     <TextField
                         required
                         label='Email'
@@ -121,7 +121,7 @@ export default function Register(props) {
                         onChange={(e) => setEmail(e.target.value)}
                         style={{
                             width: '80%',
-                        }}></TextField>
+                        }} />
                     <TextField
                         required
                         label='Password'
@@ -131,7 +131,7 @@ export default function Register(props) {
                         onChange={(e) => setPassword(e.target.value)}
                         style={{
                             width: '80%',
-                        }}></TextField>
+                        }} />
                     <Button variant='contained' onClick={submitRegister} style={{
                         margin: '2rem 0',
                     }}>SIGN UP</Button>

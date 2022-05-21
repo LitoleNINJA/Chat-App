@@ -167,7 +167,7 @@ export default function Login(props) {
                     onChange={(e) => setEmail(e.target.value)}
                     style={{
                         width: '80%',
-                    }}></TextField>
+                    }} />
                 <TextField
                     required
                     label='Password'
@@ -182,7 +182,7 @@ export default function Login(props) {
                     }}
                     style={{
                         width: '80%',
-                    }}></TextField>
+                    }} />
                 <h3 style={{
                     margin: '1rem 0 0'
                 }}>Forgot your password?</h3>

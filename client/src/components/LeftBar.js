@@ -236,7 +236,7 @@ export default function LeftBar() {
           borderRadius: '1rem',
           border: '3px solid #08D9D6',
         }}
-      ></TextField>
+       />
 
       <SwipeableDrawer
         anchor='left'
@@ -271,7 +271,7 @@ export default function LeftBar() {
                 color: '#fff',
                 width: '100%',
               }}
-            ></Input>
+             />
           </Box>
           <Divider variant="middle" sx={{
             width: '100%',
