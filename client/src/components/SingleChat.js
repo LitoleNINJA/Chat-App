@@ -365,8 +365,8 @@ export default function SingleChat() {
                 <Box>
                   <LottieAnimation
                     animation={typingAnimation}
-                    loop={true}
-                    autoplay={true}
+                    loop
+                    autoplay
                     rendererSettings={{
                       preserveAspectRatio: 'xMidYMid slice',
                     }}
@@ -404,7 +404,7 @@ export default function SingleChat() {
                 <Picker
                   onEmojiClick={handleEmoji}
                   skinTone={SKIN_TONE_MEDIUM_LIGHT}
-                  disableSearchBar={true}
+                  disableSearchBar
                   pickerStyle={{
                     position: 'absolute',
                     width: '25rem',

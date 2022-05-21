@@ -222,7 +222,7 @@ export default function LeftBar() {
         variant='outlined'
         label='Search for Users'
         size='small'
-        disabled={true}
+        disabled
         onClick={() => setDrawerOpen(true)}
         InputLabelProps={{
           style: {
@@ -263,7 +263,7 @@ export default function LeftBar() {
             }}>Search Users</Typography>
             <Input
               placeholder="Username or Email ..."
-              autoFocus={true}
+              autoFocus
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               style={{
