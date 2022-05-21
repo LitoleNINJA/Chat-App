@@ -458,7 +458,6 @@ export default function LeftBar() {
                   backgroundColor: '#892CDC',
                 },
                 backgroundColor: selectedChat === item._id ? '#5800FF' : '#000000',
-                width: '100%',
                 cursor: 'pointer',
                 paddingLeft: '0',
                 paddingRight: '0',

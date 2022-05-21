@@ -12,6 +12,7 @@ import CardMedia from '@mui/material/CardMedia';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Picker, { SKIN_TONE_MEDIUM_LIGHT } from 'emoji-picker-react';
 import { LottieAnimation } from "react-lottie-tools";
+import CircularProgress from '@mui/material/CircularProgress';
 
 import { ChatState } from '../context/ChatProvider';
 import typingAnimation from '../animations/typingAnimation.json';
@@ -276,106 +277,113 @@ export default function SingleChat() {
             flexDirection: 'column-reverse',
             overflowY: 'scroll',
           }}>
-            <Box>
-              {messages && messages.map((m, i) => (
-                <Box key={i} sx={{
-                  display: 'flex',
-                  alignItems: 'space-between',
-                  flexDirection: isSenderUser(messages, i, user._id) ? 'row-reverse' : 'row',
-                }}>
-                  {(!isSenderSame(messages, m, i) && (
-                    <Avatar alt={m.sender.username} src={m.sender.user_avatar} sx={{
-                      margin: isSenderUser(messages, i, user._id) ? '2rem 1rem 0 0' : '2rem 0 0 1rem',
-                      width: '2rem',
-                      height: '2rem',
-                    }} />
-                  ))}
-                  <Box sx={{
+            {loading ? (
+              <CircularProgress sx={{
+                width: '5rem',
+                height: '5rem',
+              }} />
+            ) : (
+              <Box>
+                {messages && messages.map((m, i) => (
+                  <Box key={i} sx={{
                     display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: isSenderUser(messages, i, user._id) ? 'flex-end' : 'flex-start',
-                    width: '75%',
-                    marginTop: isSenderSame(messages, m, i) ? '1rem' : '2rem',
+                    alignItems: 'space-between',
+                    flexDirection: isSenderUser(messages, i, user._id) ? 'row-reverse' : 'row',
                   }}>
-                    {!isSenderSame(messages, m, i) && (
-                      <Box sx={{
-                        marginRight: isSenderSame(messages, m, i) ? '3rem' : '1rem',
-                        marginLeft: isSenderSame(messages, m, i) ? '3rem' : '1rem',
-                        display: 'flex',
-                        flexDirection: 'row',
-                      }}>
-                        <Typography variant='body1' style={{
-                          color: '#fff',
-                        }}>{isSenderUser(messages, i, user._id) ? 'You' : m.sender.username}</Typography>
-                        <Typography variant='body1' style={{
-                          marginLeft: '0.5rem',
-                          color: '#fff',
-                        }}>{getTime(m)}</Typography>
-                      </Box>
-                    )}
-                    {isSenderSame(messages, m, i) && isGap(messages, i) && (
-                      <Box sx={{
-                        marginRight: isSenderSame(messages, m, i) ? '3rem' : '1rem',
-                        marginLeft: isSenderSame(messages, m, i) ? '3rem' : '1rem',
-                        display: 'flex',
-                        flexDirection: 'row',
-                      }}>
-                        <Typography variant='body1' style={{
-                          marginLeft: '0.5rem',
-                          color: '#fff',
-                        }}>{getTime(m)}</Typography>
-                      </Box>
-                    )}
-                    {m.isImage === false ? (
-                      <Box sx={{
-                        bgcolor: `${m.sender._id === user._id ? '#2c82fa' : '#0a864b'}`,
-                        borderRadius: isSenderUser(messages, i, user._id) ? '10rem 0 10rem 10rem' : '0 10rem 10rem 10rem',
-                        p: '0.3rem 0.8rem',
-                        maxWidth: '50%',
-                        marginRight: isSenderSame(messages, m, i) ? '3rem' : '1rem',
-                        marginLeft: isSenderSame(messages, m, i) ? '3rem' : '1rem',
-                      }}>
-                        <Typography variant='body1' style={{
-                          color: '#fff',
-                        }}>{m.text}</Typography>
-                      </Box>
-                    ) : (
-                      <Box sx={{
-                        bgcolor: `${m.sender._id === user._id ? '#2c82fa' : '#4aac7e'}`,
-                        borderRadius: isSenderUser(messages, i, user._id) ? '1rem 0 1rem 1rem' : '0 1rem 1rem 1rem',
-                        p: '0.3rem',
-                        maxWidth: {lg: '50%'},
-                        marginRight: isSenderSame(messages, m, i) ? '3rem' : '1rem',
-                        marginLeft: isSenderSame(messages, m, i) ? '3rem' : '1rem',
-                      }}>
-                        <CardMedia
-                          src={m.text}
-                          image={m.text}
-                          sx={{
-                            borderRadius: '1rem',
-                            width: '15rem',
-                            height: '15rem',
-                          }} />
-                      </Box>
-                    )}
+                    {(!isSenderSame(messages, m, i) && (
+                      <Avatar alt={m.sender.username} src={m.sender.user_avatar} sx={{
+                        margin: isSenderUser(messages, i, user._id) ? '2rem 1rem 0 0' : '2rem 0 0 1rem',
+                        width: '2rem',
+                        height: '2rem',
+                      }} />
+                    ))}
+                    <Box sx={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: isSenderUser(messages, i, user._id) ? 'flex-end' : 'flex-start',
+                      width: '75%',
+                      marginTop: isSenderSame(messages, m, i) ? '1rem' : '2rem',
+                    }}>
+                      {!isSenderSame(messages, m, i) && (
+                        <Box sx={{
+                          marginRight: isSenderSame(messages, m, i) ? '3rem' : '1rem',
+                          marginLeft: isSenderSame(messages, m, i) ? '3rem' : '1rem',
+                          display: 'flex',
+                          flexDirection: 'row',
+                        }}>
+                          <Typography variant='body1' style={{
+                            color: '#fff',
+                          }}>{isSenderUser(messages, i, user._id) ? 'You' : m.sender.username}</Typography>
+                          <Typography variant='body1' style={{
+                            marginLeft: '0.5rem',
+                            color: '#fff',
+                          }}>{getTime(m)}</Typography>
+                        </Box>
+                      )}
+                      {isSenderSame(messages, m, i) && isGap(messages, i) && (
+                        <Box sx={{
+                          marginRight: isSenderSame(messages, m, i) ? '3rem' : '1rem',
+                          marginLeft: isSenderSame(messages, m, i) ? '3rem' : '1rem',
+                          display: 'flex',
+                          flexDirection: 'row',
+                        }}>
+                          <Typography variant='body1' style={{
+                            marginLeft: '0.5rem',
+                            color: '#fff',
+                          }}>{getTime(m)}</Typography>
+                        </Box>
+                      )}
+                      {m.isImage === false ? (
+                        <Box sx={{
+                          bgcolor: `${m.sender._id === user._id ? '#2c82fa' : '#0a864b'}`,
+                          borderRadius: isSenderUser(messages, i, user._id) ? '10rem 0 10rem 10rem' : '0 10rem 10rem 10rem',
+                          p: '0.3rem 0.8rem',
+                          maxWidth: '50%',
+                          marginRight: isSenderSame(messages, m, i) ? '3rem' : '1rem',
+                          marginLeft: isSenderSame(messages, m, i) ? '3rem' : '1rem',
+                        }}>
+                          <Typography variant='body1' style={{
+                            color: '#fff',
+                          }}>{m.text}</Typography>
+                        </Box>
+                      ) : (
+                        <Box sx={{
+                          bgcolor: `${m.sender._id === user._id ? '#2c82fa' : '#4aac7e'}`,
+                          borderRadius: isSenderUser(messages, i, user._id) ? '1rem 0 1rem 1rem' : '0 1rem 1rem 1rem',
+                          p: '0.3rem',
+                          maxWidth: { lg: '50%' },
+                          marginRight: isSenderSame(messages, m, i) ? '3rem' : '1rem',
+                          marginLeft: isSenderSame(messages, m, i) ? '3rem' : '1rem',
+                        }}>
+                          <CardMedia
+                            src={m.text}
+                            image={m.text}
+                            sx={{
+                              borderRadius: '1rem',
+                              width: '15rem',
+                              height: '15rem',
+                            }} />
+                        </Box>
+                      )}
+                    </Box>
                   </Box>
-                </Box>
-              ))}
-              {isTyping && !typing && (
-                <Box>
-                  <LottieAnimation
-                    animation={typingAnimation}
-                    loop={true}
-                    autoplay={true}
-                    rendererSettings={{
-                      preserveAspectRatio: 'xMidYMid slice',
-                    }}
-                    style={{ width: "150px", height: "50px" }}
-                  />
-                </Box>
-              )}
-              <Box ref={scrollRef} />
-            </Box>
+                ))}
+                {isTyping && !typing && (
+                  <Box>
+                    <LottieAnimation
+                      animation={typingAnimation}
+                      loop={true}
+                      autoplay={true}
+                      rendererSettings={{
+                        preserveAspectRatio: 'xMidYMid slice',
+                      }}
+                      style={{ width: "150px", height: "50px" }}
+                    />
+                  </Box>
+                )}
+                <Box ref={scrollRef} />
+              </Box>
+            )}
           </Box>
 
           {/* Chat Send */}
