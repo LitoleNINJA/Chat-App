@@ -81,7 +81,7 @@ const google = async (req, res) => {
             audience: process.env.GOOGLE_CLIENT_ID
         });
         const payload = ticket.getPayload();
-        const user = await User.findOne({ email: payload.email });
+        let user = await User.findOne({ email: payload.email });
         if (!user) {
             const password = Math.random().toString(36).slice(-8);
             const salt = await bcrypt.genSalt(10);
