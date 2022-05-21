@@ -7,7 +7,6 @@ import AddIcon from '@mui/icons-material/Add';
 import TextField from '@mui/material/TextField';
 import Avatar from '@mui/material/Avatar';
 import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
@@ -109,12 +108,10 @@ export default function LeftBar() {
     }
   }, [search]);
 
-  const deleteGroup = async () => {
-    if (!selectedChat) {
-      return;
-    }
+  const deleteGroup = async (groupID) => {
+    console.log("HERE");
     try {
-      const groupId = selectedChat;
+      const groupId = groupID;
       const userToken = user.token;
       const config = {
         headers: {
@@ -132,8 +129,8 @@ export default function LeftBar() {
   const openWidget = () => {
     const widget = window.cloudinary.createUploadWidget(
       {
-        cloudName: 'dkgydognh',
-        uploadPreset: 'imgUpload',
+        cloudName: process.env.REACT_APP_CLOUDINARY_CLOUD_NAME,
+        uploadPreset: process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET,
       },
       (error, result) => {
         if (result.event === 'success') {
@@ -496,7 +493,7 @@ export default function LeftBar() {
                 }}>
                 <MenuItem>Rename</MenuItem>
                 <MenuItem
-                  onClick={deleteGroup}
+                  onClick={() => deleteGroup(item._id)}
                 >Delete</MenuItem>
               </Menu>
             </Badge>

@@ -95,7 +95,7 @@ const deleteGroup = async (req, res) => {
                 message: 'Group not found'
             });
         }
-        if(group.groupAdmin !== req.user.userId) {
+        if(!group.isPersonal && group.groupAdmin !== req.user.userId) {
             return res.status(401).send({
                 message: 'You are not the group admin'
             });

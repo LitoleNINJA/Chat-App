@@ -214,8 +214,8 @@ export default function SingleChat() {
   const openWidget = () => {
     const widget = window.cloudinary.createUploadWidget(
       {
-        cloudName: 'dkgydognh',
-        uploadPreset: 'imgUpload',
+        cloudName: process.env.REACT_APP_CLOUDINARY_CLOUD_NAME,
+        uploadPreset: process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET,
       },
       (error, result) => {
         if (result.event === 'success') {

@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 require('./server/config/db')();
 require('dotenv').config();
 
@@ -10,11 +11,25 @@ app.use(express.urlencoded({ extended: true }));
 
 require('./routes/api')(app);
 
-app.use((err, req, res) => {
-    res.send({
-        error: err.message
+// -------------------------------------------------
+const __dirname1 = path.resolve();
+if(process.env.NODE_ENV === 'production') {
+    app.use(express.static(path.join(__dirname1, '/client/build')));
+    app.get('*', (req, res) => {
+        res.sendFile(path.join(__dirname1, '/client/build', 'index.html'));
+    });
+}
+// -------------------------------------------------
+
+app.use((err, req, res, next) => {
+    const statusCode = res.statusCode === 200 ? 500 : res.statusCode;
+    res.status(statusCode);
+    res.json({
+      message: err.message,
+      stack: process.env.NODE_ENV === "production" ? null : err.stack,
     });
 });
+         
 
 const PORT = process.env.PORT || 5000;
 const server = app.listen(PORT, () => {
