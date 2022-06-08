@@ -22,7 +22,7 @@
     <a href="https://github.com/LitoleNINJA/Chat-App"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="http://hide-out.tech/">View Demo</a>
+    <a href="https://c-h-a-t-a-p-p1.herokuapp.com/">View Demo</a>
     ·
     <a href="https://github.com/LitoleNINJA/Chat-App/issues">Report Bug</a>
     ·
